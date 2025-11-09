@@ -116,11 +116,11 @@ async function seed() {
         : null;
 
       const createdAt = doc.createdAt?.$date 
-        ? parseDate(doc.createdAt.$date) 
+        ? (parseDate(doc.createdAt.$date) || new Date())
         : new Date();
 
       const updatedAt = doc.updatedAt?.$date 
-        ? parseDate(doc.updatedAt.$date) 
+        ? (parseDate(doc.updatedAt.$date) || new Date())
         : new Date();
 
       // Check if analyticsId already exists (to avoid unique constraint violation)
