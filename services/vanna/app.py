@@ -41,10 +41,39 @@ except Exception as e:
     print(f"Database connection error: {e}")
     raise
 
+# Database connection management
+def get_db_connection():
+    """Get a database connection, creating a new one if needed"""
+    global conn
+    try:
+        # Check if connection is still alive
+        if conn and not conn.closed:
+            # Test the connection with a simple query
+            try:
+                with conn.cursor() as test_cur:
+                    test_cur.execute("SELECT 1")
+                return conn
+            except (psycopg2.OperationalError, psycopg2.InterfaceError):
+                # Connection is dead, will create new one below
+                pass
+    except (AttributeError, psycopg2.OperationalError, psycopg2.InterfaceError):
+        # Connection doesn't exist or is invalid
+        pass
+    
+    # Create new connection
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        print("Reconnected to PostgreSQL database")
+        return conn
+    except Exception as e:
+        print(f"Database reconnection error: {e}")
+        raise
+
 # Get database schema for context
 def get_schema_info():
     """Get database schema information for SQL generation context"""
     try:
+        conn = get_db_connection()
         with conn.cursor() as cur:
             cur.execute("""
                 SELECT 
@@ -221,6 +250,8 @@ async def chat(request: ChatRequest):
         
         # Execute SQL query
         try:
+            # Get a fresh connection (will reconnect if needed)
+            conn = get_db_connection()
             # Rollback any previous failed transaction
             conn.rollback()
             
@@ -230,7 +261,12 @@ async def chat(request: ChatRequest):
                 data = [dict(row) for row in results]
                 conn.commit()
         except Exception as e:
-            conn.rollback()  # Rollback on error
+            # Try to reconnect and rollback on error
+            try:
+                conn = get_db_connection()
+                conn.rollback()
+            except:
+                pass  # If reconnection fails, continue with error response
             return ChatResponse(
                 response=f"Error executing SQL query: {str(e)}",
                 sql=sql,
