@@ -15,7 +15,7 @@ export function CashOutflowChart() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/cash-outflow")
+    fetch("/api/cash-outflow")
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {

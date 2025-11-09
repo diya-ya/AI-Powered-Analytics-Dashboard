@@ -18,7 +18,7 @@ export function CategorySpendChart() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/category-spend")
+    fetch("/api/category-spend")
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {

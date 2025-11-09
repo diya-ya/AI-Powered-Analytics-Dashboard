@@ -29,7 +29,7 @@ export function InvoicesTable() {
     if (search) params.set("search", search);
     params.set("limit", "50");
 
-    fetch(`http://localhost:3001/api/invoices?${params.toString()}`)
+    fetch(`/api/invoices?${params.toString()}`)
       .then((res) => res.json())
       .then((data) => {
         setInvoices(data.invoices || []);

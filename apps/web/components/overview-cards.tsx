@@ -21,7 +21,7 @@ export function OverviewCards() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/stats")
+    fetch("/api/stats")
       .then((res) => res.json())
       .then((data) => {
         // Check if response has error or is valid stats object

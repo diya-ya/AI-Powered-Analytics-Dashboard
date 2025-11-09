@@ -36,7 +36,7 @@ export default function ChatPage() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3001/api/chat-with-data", {
+      const response = await fetch("/api/chat-with-data", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

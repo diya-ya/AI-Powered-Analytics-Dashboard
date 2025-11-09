@@ -17,7 +17,7 @@ export function InvoiceTrendChart() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/invoice-trends")
+    fetch("/api/invoice-trends")
       .then((res) => res.json())
       .then((data) => {
         // Ensure data is an array

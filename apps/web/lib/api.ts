@@ -1,4 +1,6 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001';
+// Use relative path in production, or environment variable if set
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 
+  (typeof window !== 'undefined' ? '' : 'http://localhost:3001');
 
 export function getApiUrl(endpoint: string): string {
   if (endpoint.startsWith('http')) {
@@ -6,6 +8,10 @@ export function getApiUrl(endpoint: string): string {
   }
   // Remove leading slash if present to avoid double slashes
   const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  // If API_BASE is empty (production), use relative path
+  if (!API_BASE) {
+    return cleanEndpoint;
+  }
   return `${API_BASE}${cleanEndpoint}`;
 }
 
