@@ -124,7 +124,7 @@ async function seed() {
         : new Date();
 
       // Check if analyticsId already exists (to avoid unique constraint violation)
-      let analyticsId = doc.analyticsId;
+      let analyticsId: string | null | undefined = doc.analyticsId;
       if (analyticsId) {
         const existing = await prisma.document.findUnique({
           where: { analyticsId },
