@@ -1,8 +1,13 @@
 import { NextResponse } from 'next/server';
 
+interface ChatRequest {
+  query: string;
+}
+
 export async function POST(request: Request) {
   try {
-    const { query } = await request.json();
+    const body = await request.json() as ChatRequest;
+    const { query } = body;
 
     if (!query) {
       return NextResponse.json(
