@@ -3,6 +3,12 @@ const path = require('path');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Skip static optimization for API routes
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '2mb',
+    },
+  },
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
